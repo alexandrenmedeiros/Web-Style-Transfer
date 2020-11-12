@@ -56,8 +56,10 @@ function App() {
   const [styleImageUrl, setStyleImageUrl] = React.useState(null)
   const [showStyleImage, setShowStyleImage] = React.useState(false)
   const [StyleImageCanvas, setStyleImageCanvas] = React.useState(null)
+  const [maxSizeStyleImage, setMaxSizeStyleImage] = React.useState(250)
 
   // output image variables
+  const [styleStrength, setStyleStrength] = React.useState(1.0)
   const [outputImageUrl, setOutputImageUrl] = React.useState(null)
   const [showOutputImage, setShowOutputImage] = React.useState(false)
 
@@ -92,13 +94,20 @@ function App() {
 
   const handleMaxSizeContent = Event => {
     setTimeout(() => {
-      console.log(Event.target.value)
       setMaxSizeContentImage(Event.target.value)
 
       if (contentImage != null) {
         resizeImageUrl(contentImage, setContentImageUrl, setContentImageCanvas, Event.target.value)
       }
-    }, 60)
+    }, 10)
+  }
+
+  const handleMaxSizeStyle = Event => {
+    setMaxSizeStyleImage(Event.target.value)
+  }
+
+  const handleStyleStrength = Event => {
+    setStyleStrength(Event.target.value)
   }
 
   const handleStyleSelect = selectedStyleOption => {
@@ -107,7 +116,7 @@ function App() {
       fetch(selectedStyleOption.value)
         .then(response => response.blob())
         .then(img =>{
-          resizeImageUrl(img, setStyleImageUrl, setStyleImageCanvas, 250)
+          resizeImageUrl(img, setStyleImageUrl, setStyleImageCanvas, maxSizeStyleImage)
           setShowStyleImage(true)
         })
     }
@@ -128,7 +137,7 @@ function App() {
   const styleImage = async () => {
     // (step 1) second state, page to set content and style images
     if (model != null && model.initialized && contentImageUrl != null && styleImageUrl != null) {
-      model.stylize(contentImageCanvas, StyleImageCanvas)
+      model.stylize(contentImageCanvas, StyleImageCanvas, Number(styleStrength))
         .then( outImageData => {
           var canvas = document.createElement('canvas')
           canvas.width = contentImageCanvas.width
@@ -167,11 +176,14 @@ function App() {
   return (
     <div className="App">
       {step === 1 && <input type='file' accept='image/*' onChange={handleUpload}/>}
-      {step === 1 && <input type='range' min='100' max='800' defaultValue='400' onChange={handleMaxSizeContent} />}
+      {step === 1 && <input type='range' min='100' max='900' defaultValue='400' onChange={handleMaxSizeContent} />}
       {showContentImage === true && <img src={contentImageUrl} alt="upload-preview" />}
 
       {step === 1 && <Select options={styleOptions} onChange={handleStyleSelect} />}
+      {step === 1 && <input type='range' min='50' max='500' defaultValue='250' onChange={handleMaxSizeStyle} />}
       {showStyleImage === true && <img src={styleImageUrl} alt="upload-preview" />}
+
+      {step === 1 && <input type='range' min='0' max='1.0' defaultValue='1.0' step="0.1" onChange={handleStyleStrength} />}
 
       {showOutputImage === true && <img src={outputImageUrl} alt="upload-preview" />}
 
