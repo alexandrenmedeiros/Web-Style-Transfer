@@ -182,9 +182,9 @@ function App() {
     <div className="App">
       <Container className='p-3'>
         <Jumbotron>
-          <h1 className="header">Image Style Transfer</h1>
+          <h1 className="header" class='my-5'>Image Style Transfer</h1>
 
-          {step === 1 && <h3>Input an Image to be Styled</h3>}
+          {step === 1 && <h3 class='mt-5'>Input an Image to be Styled</h3>}
           {step === 1 && <br />}
           {step === 1 && <input class="btn btn-secondary" type='file' accept='image/*' onChange={handleUpload} />}
           {step === 1 && <br />}
@@ -193,7 +193,7 @@ function App() {
           {step === 1 && <br />}
           {showContentImage === true && <img class='img-fluid' src={contentImageUrl} alt="upload-preview" />}
 
-          {step === 1 && <h3>Choose a Style Image</h3>}
+          {step === 1 && <h3 class='mt-5'>Choose a Style Image</h3>}
           {step === 1 && <Select options={styleOptions} onChange={handleStyleSelect} />}
           {showStyleImage === true && <p>Style Image Size: (reselect from list after change)</p>}
           {showStyleImage === true && <input type='range' min='50' max='400' defaultValue='250' onChange={handleMaxSizeStyle} />}
@@ -201,10 +201,10 @@ function App() {
           {showStyleImage === true && <img class='img-fluid' src={styleImageUrl} alt="upload-preview" />}
 
           {step === 1 && <br />}
-          {step === 1 && <p>Style Transfer Strength:</p>}
+          {step === 1 && <p class='mt-5'>Style Transfer Strength:</p>}
           {step === 1 && <input type='range' min='0' max='1.0' defaultValue='1.0' step="0.1" onChange={handleStyleStrength} />}
           {step === 1 && <br />}
-          {showOutputImage === true && <img class='img-fluid' src={outputImageUrl} alt="upload-preview" />}
+          {showOutputImage === true && <img class='img-fluid mb-5' src={outputImageUrl} alt="upload-preview" />}
 
           <br />
           <Button onClick={buttonFunction[step].func}>{buttonFunction[step].text}</Button>
