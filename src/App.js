@@ -3,12 +3,12 @@ import React from 'react'
 import Select from 'react-select'
 import * as mi from '@magenta/image'
 
-function resizeImageUrl(img_file, setUrl, max_ax=1200) {
+function resizeImageUrl(img_file, setUrl, setCanvas, max_ax=1200) {
   // function that resize an image file using a FileReader and a canvas
   // it returns the canvas url
 
-  var img = document.createElement('img')
-  var reader = new FileReader()
+  const img = document.createElement('img')
+  const reader = new FileReader()
 
   img.onload = function() {
     var canvas = document.createElement('canvas')
@@ -22,11 +22,12 @@ function resizeImageUrl(img_file, setUrl, max_ax=1200) {
       canvas.height = this.height * (max_ax / biggest_ax)
     }
 
-    var ctx = canvas.getContext("2d");
-    ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
+    var ctx = canvas.getContext("2d")
+    ctx.drawImage(this, 0, 0, canvas.width, canvas.height)
 
-    const url = canvas.toDataURL();
+    const url = canvas.toDataURL()
     setUrl(url)
+    setCanvas(canvas)
   }
     
   // function to specify what the reader will do when loading the image
@@ -43,12 +44,20 @@ function App() {
   // 0: loading model, 1: input step, 2: output step
   const [step, setStep] = React.useState(0)
   const [model, setModel] = React.useState(null)
+
+  // Content image variables
   const [contentImageUrl, setContentImageUrl] = React.useState(null)
   const [showContentImage, setShowContentImage] = React.useState(false)
+  const [contentImageCanvas, setContentImageCanvas] = React.useState(null)
+
+  // style image variables
   const [styleImageUrl, setStyleImageUrl] = React.useState(null)
   const [showStyleImage, setShowStyleImage] = React.useState(false)
-  // const [outputImageUrl, setOutputImageUrl] = React.useState(null)
-  // const [showOutputImage, setShowOutputImage] = React.useState(false)
+  const [StyleImageCanvas, setStyleImageCanvas] = React.useState(null)
+
+  // output image variables
+  const [outputImageUrl, setOutputImageUrl] = React.useState(null)
+  const [showOutputImage, setShowOutputImage] = React.useState(false)
 
   const styleOptions = [
     {label: 'kanagawa_great_wave', value: 'https://upload.wikimedia.org/wikipedia/commons/0/0a/The_Great_Wave_off_Kanagawa.jpg'},
@@ -72,17 +81,18 @@ function App() {
 
     if (img != null) {
 
-      resizeImageUrl(img, setContentImageUrl, 600)
+      resizeImageUrl(img, setContentImageUrl, setContentImageCanvas, 600)
       setShowContentImage(true)
     }
   }
 
   const handleStyleSelect = selectedStyleOption => {
+    
     if(selectedStyleOption != null) {
       fetch(selectedStyleOption.value)
         .then(response => response.blob())
         .then(img =>{
-          resizeImageUrl(img, setStyleImageUrl, 256)
+          resizeImageUrl(img, setStyleImageUrl, setStyleImageCanvas, 256)
           setShowStyleImage(true)
         })
     }
@@ -92,17 +102,29 @@ function App() {
   const loadModel = async () => {
     // (step 0) first state, load model in the browser
 
-    const model =  mi.ArbitraryStyleTransferNetwork();
+    const model =  new mi.ArbitraryStyleTransferNetwork();
     setModel(model)
+    model.initialize()
 
     setStep(1)
   }
 
+
   const styleImage = async () => {
     // (step 1) second state, page to set content and style images
-    // if (contentImageUrl != null && styleImageUrl != null) {
-      
-    // }
+    if (model != null && model.initialized && contentImageUrl != null && styleImageUrl != null) {
+      model.stylize(contentImageCanvas, StyleImageCanvas)
+        .then( outImageData => {
+          var canvas = document.createElement('canvas')
+          canvas.width = contentImageCanvas.width
+          canvas.height = contentImageCanvas.height
+          var ctx = canvas.getContext("2d")
+          ctx.putImageData(outImageData, 0, 0)
+
+          setOutputImageUrl(canvas.toDataURL())
+          setShowOutputImage(true)
+        })
+    }
 
     setShowContentImage(false) // dont show image preview after button press
     setShowStyleImage(false) // dont show image preview after button press
@@ -114,6 +136,7 @@ function App() {
 
     setContentImageUrl(null)
     setStyleImageUrl(null)
+    setShowOutputImage(false)
     setStep(1)
   }
 
@@ -132,6 +155,8 @@ function App() {
 
       {step === 1 && <Select options={styleOptions} onChange={handleStyleSelect} />}
       {showStyleImage === true && <img src={styleImageUrl} alt="upload-preview" />}
+
+      {showOutputImage === true && <img src={outputImageUrl} alt="upload-preview" />}
 
       <button onClick={buttonFunction[step].func}>{buttonFunction[step].text}</button>
     </div>
