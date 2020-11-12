@@ -2,6 +2,40 @@ import './App.css';
 import React from 'react'
 import * as mi from '@magenta/image'
 
+function resizeImageUrl(img_file, setUrl, max_ax=1200) {
+  // function that resize an image file using a FileReader and a canvas
+  // it returns the canvas url
+
+  var img = document.createElement('img')
+  var reader = new FileReader()
+
+  img.onload = function() {
+    var canvas = document.createElement('canvas')
+    canvas.width = this.width
+    canvas.height = this.height
+
+    if (this.height > max_ax || this.width > max_ax) {
+      const biggest_ax = Math.max(this.width, this.height)
+
+      canvas.width = this.width * (max_ax / biggest_ax)
+      canvas.height = this.height * (max_ax / biggest_ax)
+    }
+    
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
+
+    const url = canvas.toDataURL();
+    setUrl(url)
+  }
+    
+  // function to specify what the reader will do when loading the image
+  reader.onload = function(e) {
+    img.src = e.target.result
+  }
+
+  reader.readAsDataURL(img_file)
+}
+
 function App() {
 
   // step says wich step the user is on, 
@@ -16,8 +50,8 @@ function App() {
     const img = Event.target.files[0]
 
     if (img != null) {
-      const url = URL.createObjectURL(img)
-      setContentImageUrl(url)
+
+      resizeImageUrl(img, setContentImageUrl, 600)
       setShowContentImage(true)
     }
   }
@@ -25,10 +59,6 @@ function App() {
   // State machine on site functions
   const loadModel = async () => {
     // (step 0) first state, load model in the browser
-
-    // setTimeout(() => {
-    //   setStep(1)
-    // }, 3000);
 
     const model =  mi.ArbitraryStyleTransferNetwork();
     setModel(model)
@@ -45,6 +75,7 @@ function App() {
 
   const reset = async () => {
     // (step 2) third state, show model output and can go back to second state
+
     setStep(1)
   }
 
