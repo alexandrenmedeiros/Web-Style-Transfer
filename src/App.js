@@ -3,6 +3,11 @@ import React from 'react'
 import Select from 'react-select'
 import * as mi from '@magenta/image'
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Button from 'react-bootstrap/Button'
+import Container from 'react-bootstrap/Container'
+import Jumbotron from 'react-bootstrap/Jumbotron'
+
 function resizeImageUrl(img_file, setUrl, setCanvas, max_ax=1200) {
   // function that resize an image file using a FileReader and a canvas
   // it returns the canvas url
@@ -175,19 +180,37 @@ function App() {
   // State machine output (On state)
   return (
     <div className="App">
-      {step === 1 && <input type='file' accept='image/*' onChange={handleUpload}/>}
-      {step === 1 && <input type='range' min='300' max='600' defaultValue='400' onChange={handleMaxSizeContent} />}
-      {showContentImage === true && <img src={contentImageUrl} alt="upload-preview" />}
+      <Container className='p-3'>
+        <Jumbotron>
+          <h1 className="header">Image Style Transfer</h1>
 
-      {step === 1 && <Select options={styleOptions} onChange={handleStyleSelect} />}
-      {step === 1 && <input type='range' min='50' max='400' defaultValue='250' onChange={handleMaxSizeStyle} />}
-      {showStyleImage === true && <img src={styleImageUrl} alt="upload-preview" />}
+          {step === 1 && <h3>Input an Image to be Styled</h3>}
+          {step === 1 && <br />}
+          {step === 1 && <input class="btn btn-secondary" type='file' accept='image/*' onChange={handleUpload} />}
+          {step === 1 && <br />}
+          {showContentImage === true && <p> Content Image Size:</p>}
+          {showContentImage === true && <input type='range' min='300' max='600' defaultValue='400' onChange={handleMaxSizeContent} />}
+          {step === 1 && <br />}
+          {showContentImage === true && <img class='img-fluid' src={contentImageUrl} alt="upload-preview" />}
 
-      {step === 1 && <input type='range' min='0' max='1.0' defaultValue='1.0' step="0.1" onChange={handleStyleStrength} />}
+          {step === 1 && <h3>Choose a Style Image</h3>}
+          {step === 1 && <Select options={styleOptions} onChange={handleStyleSelect} />}
+          {showStyleImage === true && <p>Style Image Size: (reselect from list after change)</p>}
+          {showStyleImage === true && <input type='range' min='50' max='400' defaultValue='250' onChange={handleMaxSizeStyle} />}
+          {step === 1 && <br />}
+          {showStyleImage === true && <img class='img-fluid' src={styleImageUrl} alt="upload-preview" />}
 
-      {showOutputImage === true && <img src={outputImageUrl} alt="upload-preview" />}
+          {step === 1 && <br />}
+          {step === 1 && <p>Style Transfer Strength:</p>}
+          {step === 1 && <input type='range' min='0' max='1.0' defaultValue='1.0' step="0.1" onChange={handleStyleStrength} />}
+          {step === 1 && <br />}
+          {showOutputImage === true && <img class='img-fluid' src={outputImageUrl} alt="upload-preview" />}
 
-      <button onClick={buttonFunction[step].func}>{buttonFunction[step].text}</button>
+          <br />
+          <Button onClick={buttonFunction[step].func}>{buttonFunction[step].text}</Button>
+
+        </Jumbotron>
+      </Container>
     </div>
   );
 }
