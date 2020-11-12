@@ -99,7 +99,7 @@ function App() {
       if (contentImage != null) {
         resizeImageUrl(contentImage, setContentImageUrl, setContentImageCanvas, Event.target.value)
       }
-    }, 20)
+    }, 400)
   }
 
   const handleMaxSizeStyle = Event => {
@@ -176,11 +176,11 @@ function App() {
   return (
     <div className="App">
       {step === 1 && <input type='file' accept='image/*' onChange={handleUpload}/>}
-      {step === 1 && <input type='range' min='100' max='900' defaultValue='400' onChange={handleMaxSizeContent} />}
+      {step === 1 && <input type='range' min='300' max='600' defaultValue='400' onChange={handleMaxSizeContent} />}
       {showContentImage === true && <img src={contentImageUrl} alt="upload-preview" />}
 
       {step === 1 && <Select options={styleOptions} onChange={handleStyleSelect} />}
-      {step === 1 && <input type='range' min='50' max='500' defaultValue='250' onChange={handleMaxSizeStyle} />}
+      {step === 1 && <input type='range' min='50' max='400' defaultValue='250' onChange={handleMaxSizeStyle} />}
       {showStyleImage === true && <img src={styleImageUrl} alt="upload-preview" />}
 
       {step === 1 && <input type='range' min='0' max='1.0' defaultValue='1.0' step="0.1" onChange={handleStyleStrength} />}
