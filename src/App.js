@@ -99,7 +99,7 @@ function App() {
       if (contentImage != null) {
         resizeImageUrl(contentImage, setContentImageUrl, setContentImageCanvas, Event.target.value)
       }
-    }, 10)
+    }, 20)
   }
 
   const handleMaxSizeStyle = Event => {
