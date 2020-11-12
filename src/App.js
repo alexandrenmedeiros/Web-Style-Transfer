@@ -46,7 +46,7 @@ function resizeImageUrl(img_file, setUrl, setCanvas, max_ax=1200) {
 function App() {
 
   // step says wich step the user is on, 
-  // 0: loading model, 1: input step, 2: output step
+  // 0: loading model, 1: using model
   const [step, setStep] = React.useState(0)
   const [model, setModel] = React.useState(null)
 
@@ -164,26 +164,12 @@ function App() {
         })
     }
 
-    setShowContentImage(false) // dont show image preview after button press
-    setShowStyleImage(false) // dont show image preview after button press
-    setStep(2)
-  }
-
-  const reset = async () => {
-    // (step 2) third state, show model output and can go back to second state
-
-    setContentImageUrl(null)
-    setStyleImageUrl(null)
-    setOutputImageUrl(null)
-    setShowOutputImage(false)
-    setStep(1)
   }
 
   // button actions to swap through states
   const buttonFunction = {
     0 : {text: 'Load Model', func: loadModel},
-    1 : {text: 'Style Image', func: styleImage},
-    2 : {text: 'New Style Transfer', func: reset}
+    1 : {text: 'Style Image', func: styleImage}
   }
 
   // State machine output (On state)
@@ -213,10 +199,12 @@ function App() {
           {step === 1 && <p class='mt-5'>Style Transfer Strength:</p>}
           {step === 1 && <input type='range' min='0' max='1.0' defaultValue='1.0' step="0.1" onChange={handleStyleStrength} />}
           {step === 1 && <br />}
-          {showOutputImage === true && <img class='img-fluid mb-5' src={outputImageUrl} alt="upload-preview" />}
 
           <br />
           <Button onClick={buttonFunction[step].func}>{buttonFunction[step].text}</Button>
+
+          {showOutputImage === true && <h2 class='mt-5'>Stylized Image</h2>}
+          {showOutputImage === true && <img class='img-fluid mb-5' src={outputImageUrl} alt="upload-preview" />}
 
         </Jumbotron>
       </Container>
