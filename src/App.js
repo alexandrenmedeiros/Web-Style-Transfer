@@ -51,13 +51,14 @@ function App() {
   const [model, setModel] = React.useState(null)
 
   // Content image variables
-  const [contentImage, setContentImage] = React.useState(null)
+  const [contentImageBlob, setContentImageBlob] = React.useState(null)
   const [contentImageUrl, setContentImageUrl] = React.useState(null)
   const [showContentImage, setShowContentImage] = React.useState(false)
   const [contentImageCanvas, setContentImageCanvas] = React.useState(null)
   const [maxSizeContentImage, setMaxSizeContentImage] = React.useState(400)
 
   // style image variables
+  const [styleImageBlob, setStyleImageBlob] = React.useState(null)
   const [styleImageUrl, setStyleImageUrl] = React.useState(null)
   const [showStyleImage, setShowStyleImage] = React.useState(false)
   const [StyleImageCanvas, setStyleImageCanvas] = React.useState(null)
@@ -89,7 +90,7 @@ function App() {
   // handle functions
   const handleUpload = Event => {
     const img = Event.target.files[0]
-    setContentImage(img)
+    setContentImageBlob(img)
 
     if (img != null) {
       resizeImageUrl(img, setContentImageUrl, setContentImageCanvas, maxSizeContentImage)
@@ -101,14 +102,20 @@ function App() {
     setTimeout(() => {
       setMaxSizeContentImage(Event.target.value)
 
-      if (contentImage != null) {
-        resizeImageUrl(contentImage, setContentImageUrl, setContentImageCanvas, Event.target.value)
+      if (contentImageBlob != null) {
+        resizeImageUrl(contentImageBlob, setContentImageUrl, setContentImageCanvas, Event.target.value)
       }
     }, 400)
   }
 
   const handleMaxSizeStyle = Event => {
-    setMaxSizeStyleImage(Event.target.value)
+    setTimeout(() => {
+      setMaxSizeStyleImage(Event.target.value)
+
+      if (styleImageBlob != null) {
+        resizeImageUrl(styleImageBlob, setStyleImageUrl, setStyleImageCanvas, Event.target.value)
+      }
+    }, 400)
   }
 
   const handleStyleStrength = Event => {
@@ -121,6 +128,8 @@ function App() {
       fetch(selectedStyleOption.value)
         .then(response => response.blob())
         .then(img =>{
+          setStyleImageBlob(img)
+
           resizeImageUrl(img, setStyleImageUrl, setStyleImageCanvas, maxSizeStyleImage)
           setShowStyleImage(true)
         })
@@ -195,7 +204,7 @@ function App() {
 
           {step === 1 && <h3 class='mt-5'>Choose a Style Image</h3>}
           {step === 1 && <Select options={styleOptions} onChange={handleStyleSelect} />}
-          {showStyleImage === true && <p>Style Image Size: (reselect from list after change)</p>}
+          {showStyleImage === true && <p>Style Image Size: </p>}
           {showStyleImage === true && <input type='range' min='50' max='400' defaultValue='250' onChange={handleMaxSizeStyle} />}
           {step === 1 && <br />}
           {showStyleImage === true && <img class='img-fluid' src={styleImageUrl} alt="upload-preview" />}
