@@ -143,8 +143,8 @@ function App() {
 
     console.log('loading model')
     const newModel =  new mi.ArbitraryStyleTransferNetwork();
-    setModel(newModel)
     newModel.initialize()
+    setModel(newModel)
   }
 
 
@@ -182,8 +182,8 @@ function App() {
           <br />
           <input class="btn btn-secondary" type='file' accept='image/*' onChange={handleUpload} />
           <br />
-          {showContentImage === true && <p> Content Image Size:</p>}
-          {showContentImage === true && <input type='range' min='300' max='600' defaultValue='400' onChange={handleMaxSizeContent} />}
+          {showContentImage === true && <p> Content Image Size: (might not work on full size)</p>}
+          {showContentImage === true && <input type='range' min='300' max='650' defaultValue='400' onChange={handleMaxSizeContent} />}
           <br />
           {showContentImage === true && <img class='img-fluid' src={contentImageUrl} alt="upload-preview" />}
 
