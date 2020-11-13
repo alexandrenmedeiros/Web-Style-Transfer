@@ -137,20 +137,22 @@ function App() {
   }
 
   // State machine functions (On transitions)
-  const loadModel = async () => {
+  if (step === 0) {
     // (step 0) first state, load model in the browser
-
-    const model =  new mi.ArbitraryStyleTransferNetwork();
-    setModel(model)
-    model.initialize()
-
     setStep(1)
+
+    console.log('loading model')
+    const newModel =  new mi.ArbitraryStyleTransferNetwork();
+    setModel(newModel)
+    newModel.initialize()
   }
 
 
   const styleImage = async () => {
     // (step 1) second state, page to set content and style images
     if (model != null && model.initialized && contentImageUrl != null && styleImageUrl != null) {
+      console.log("start to style image")
+
       model.stylize(contentImageCanvas, StyleImageCanvas, Number(styleStrength))
         .then( outImageData => {
           var canvas = document.createElement('canvas')
@@ -163,13 +165,9 @@ function App() {
           setShowOutputImage(true)
         })
     }
-
-  }
-
-  // button actions to swap through states
-  const buttonFunction = {
-    0 : {text: 'Load Model', func: loadModel},
-    1 : {text: 'Style Image', func: styleImage}
+    else {
+      console.log('fail to style image')
+    }
   }
 
   // State machine output (On state)
@@ -179,30 +177,35 @@ function App() {
         <Jumbotron>
           <h1 className="header" class='my-5'>Image Style Transfer</h1>
 
-          {step === 1 && <h3 class='mt-5'>Input an Image to be Styled</h3>}
-          {step === 1 && <br />}
-          {step === 1 && <input class="btn btn-secondary" type='file' accept='image/*' onChange={handleUpload} />}
-          {step === 1 && <br />}
+          {/* content image section */}
+          <h3 class='mt-5'>Input an Image to be Styled</h3>
+          <br />
+          <input class="btn btn-secondary" type='file' accept='image/*' onChange={handleUpload} />
+          <br />
           {showContentImage === true && <p> Content Image Size:</p>}
           {showContentImage === true && <input type='range' min='300' max='600' defaultValue='400' onChange={handleMaxSizeContent} />}
-          {step === 1 && <br />}
+          <br />
           {showContentImage === true && <img class='img-fluid' src={contentImageUrl} alt="upload-preview" />}
 
-          {step === 1 && <h3 class='mt-5'>Choose a Style Image</h3>}
-          {step === 1 && <Select options={styleOptions} onChange={handleStyleSelect} />}
+          {/* style image section */}
+          <h3 class='mt-5'>Choose a Style Image</h3>
+          <Select options={styleOptions} onChange={handleStyleSelect} />
           {showStyleImage === true && <p>Style Image Size: </p>}
           {showStyleImage === true && <input type='range' min='50' max='400' defaultValue='250' onChange={handleMaxSizeStyle} />}
-          {step === 1 && <br />}
+          <br />
           {showStyleImage === true && <img class='img-fluid' src={styleImageUrl} alt="upload-preview" />}
 
-          {step === 1 && <br />}
-          {step === 1 && <p class='mt-5'>Style Transfer Strength:</p>}
-          {step === 1 && <input type='range' min='0' max='1.0' defaultValue='1.0' step="0.1" onChange={handleStyleStrength} />}
-          {step === 1 && <br />}
-
+          {/* style transfer section */}
           <br />
-          <Button onClick={buttonFunction[step].func}>{buttonFunction[step].text}</Button>
+          <p class='mt-5'>Style Transfer Strength:</p>
+          <input type='range' min='0' max='1.0' defaultValue='1.0' step="0.1" onChange={handleStyleStrength} />
+          <br />
 
+          {/* main button */}
+          <br />
+          <Button onClick={styleImage}>Style Image</Button>
+
+          {/* output image section */}
           {showOutputImage === true && <h2 class='mt-5'>Stylized Image</h2>}
           {showOutputImage === true && <img class='img-fluid mb-5' src={outputImageUrl} alt="upload-preview" />}
 
