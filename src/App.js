@@ -175,29 +175,29 @@ function App() {
     <div className="App">
       <Container className='p-3'>
         <Jumbotron>
-          <h1 className="header" class='my-5'>Image Style Transfer</h1>
+          <h1 className='header my-5'>Image Style Transfer</h1>
 
           {/* content image section */}
-          <h3 class='mt-5'>Input an Image to be Styled</h3>
+          <h3 className='mt-5'>Input an Image to be Styled</h3>
           <br />
-          <input class="btn btn-secondary" type='file' accept='image/*' onChange={handleUpload} />
+          <input className="btn btn-secondary" type='file' accept='image/*' onChange={handleUpload} />
           <br />
           {showContentImage === true && <p> Content Image Size: (might not work on full size)</p>}
           {showContentImage === true && <input type='range' min='300' max='650' defaultValue='400' onChange={handleMaxSizeContent} />}
           <br />
-          {showContentImage === true && <img class='img-fluid' src={contentImageUrl} alt="upload-preview" />}
+          {showContentImage === true && <img className='img-fluid' src={contentImageUrl} alt="upload-preview" />}
 
           {/* style image section */}
-          <h3 class='mt-5'>Choose a Style Image</h3>
+          <h3 className='mt-5'>Choose a Style Image</h3>
           <Select options={styleOptions} onChange={handleStyleSelect} />
           {showStyleImage === true && <p>Style Image Size: </p>}
           {showStyleImage === true && <input type='range' min='50' max='400' defaultValue='250' onChange={handleMaxSizeStyle} />}
           <br />
-          {showStyleImage === true && <img class='img-fluid' src={styleImageUrl} alt="upload-preview" />}
+          {showStyleImage === true && <img className='img-fluid' src={styleImageUrl} alt="upload-preview" />}
 
           {/* style transfer section */}
           <br />
-          <p class='mt-5'>Style Transfer Strength:</p>
+          <p className='mt-5'>Style Transfer Strength:</p>
           <input type='range' min='0' max='1.0' defaultValue='1.0' step="0.1" onChange={handleStyleStrength} />
           <br />
 
@@ -206,8 +206,8 @@ function App() {
           <Button onClick={styleImage}>Style Image</Button>
 
           {/* output image section */}
-          {showOutputImage === true && <h2 class='mt-5'>Stylized Image</h2>}
-          {showOutputImage === true && <img class='img-fluid mb-5' src={outputImageUrl} alt="upload-preview" />}
+          {showOutputImage === true && <h2 className='mt-5'>Stylized Image</h2>}
+          {showOutputImage === true && <img className='img-fluid mb-5' src={outputImageUrl} alt="upload-preview" />}
 
         </Jumbotron>
       </Container>
