@@ -183,7 +183,7 @@ function App() {
           <input className="btn btn-secondary" type='file' accept='image/*' onChange={handleUpload} />
           <br />
           {showContentImage === true && <p> Content Image Size: (might not work on full size)</p>}
-          {showContentImage === true && <input type='range' min='300' max='650' defaultValue='400' onChange={handleMaxSizeContent} />}
+          {showContentImage === true && <input type='range' min='300' max='600' defaultValue='400' onChange={handleMaxSizeContent} />}
           <br />
           {showContentImage === true && <img className='img-fluid' src={contentImageUrl} alt="upload-preview" />}
 

@@ -1,70 +1,29 @@
-# Getting Started with Create React App
+# Style transfer Web App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repository implements a web application using React and Bootstrap. The app does a image resize and a fast arbitrary style transfer operation using two images. It does all its processing on the front end by the browser. The model used is the [@magenta/image](https://github.com/magenta/magenta-js/tree/master/image). A more detailed explanation of the model can be found on the [Reiichiro Nakano post](https://magenta.tensorflow.org/blog/2018/12/20/style-transfer-js/) about his implementation.
 
-## Available Scripts
+## Folders and Files
 
-In the project directory, you can run:
+The basic struct was created using the build setup offered by React.
 
-### `npm start`
+    npx react-creat-app
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- [/public](./public) : Folder containing the index html.
+- [/src](./src): Folder containing the javascrip and css for the index.
+    - [App.js](./src/App.js): Main file, containing the aplication component. Here is where the main code is.
+- [package.json](./package.json): Project dependecies.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## App Implementation and  Usage
 
-### `npm test`
+The application does a style transfer using a Content Image to be alter and a Style Image for reference. So, in order to do that, it request an image to the user by an input button. After that, there is a slider to resize the input image.
+    
+> **Note that** the style transfer model requires a lot of memory, so the biggest dimension size of the image is capped at 600px. It's because the browser might not handle larger images, and even with the limitation it might not work properly on the max size.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+After the Content Image is defined and its size is set, there is the need to choose a Style Image. The Style Image can be chosen from a list. After that, the Style Image can also be resized for performance improvement, and the transfer strength can be set. When both images are defined, the user can press a button to perform the style transfer. With the image processing finished, the Output Image will be shown bellow the Style Image button.
 
-### `npm run build`
+## Example Images
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+![First screen image](./example_imgs/0_initial_screen.png "First screen")
+![Content image input](./example_imgs/1_input_image.png "Content image input")
+![Set style and strength transfer](./example_imgs/2_style_and_strength.png "Set style and strength transfer")
+![Output image example](./example_imgs/3_output.png "Output image example")
